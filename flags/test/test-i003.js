@@ -54,17 +54,3 @@ test('i003 should return true if there are multiple bidders but only winner is e
   };
   assert.strictEqual(i003(release), true);
 });
-
-// TODO: research whether there can be multiple winners
-test('i003 should throw if there are multiple winners', assert => {
-  assert.plan(1);
-  const release = {
-    awards: [
-      { status: 'active', ineligibleYN: 'N' },
-      { status: 'active', ineligibleYN: 'N' }
-    ]
-  };
-  assert.throws(() => {
-    i003(release);
-  });
-});

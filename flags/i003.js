@@ -1,5 +1,3 @@
-const assert = require('assert');
-
 /**
  * Indicator 003: Only winning bidder was eligible
  *
@@ -17,11 +15,7 @@ function calculateI003(release) {
     .filter(a => a.status !== 'active')
     .reduce((ineligible, a) => a.ineligibleYN === 'N' ? false : ineligible, true);
 
-  const winners = awards.filter(a => a.status === 'active');
-
-  assert.ok(winners.length <= 1, 'There should only be one winner for a tender');
-
-  const hasWinner = winners.length === 1;
+  const hasWinner = awards.filter(a => a.status === 'active').length > 0;
 
   return hasWinner && losersIneligible;
 }
