@@ -1,0 +1,22 @@
+{
+  "name": "ocds-red-flag-calculations",
+  "version": "0.0.1",
+  "description": "Formulas for calculating corruption red-flags for OCDS JSON data",
+  "scripts": {
+    "eslint": "eslint '**/*.js'",
+    "tape": "tape",
+    "tap-spec": "tap-spec",
+    "test": "tape '**/test/test-*.js' | tap-spec"
+  },
+  "devDependencies": {
+    "eslint": "3.8.1",
+    "tape": "4.6.2"
+  },
+  "engines": {
+    "node": ">=6.8.0"
+  },
+  "dependencies": {
+    "moment": "^2.15.2",
+    "mongodb": "^2.2.11"
+  }
+}
