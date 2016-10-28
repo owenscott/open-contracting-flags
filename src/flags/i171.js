@@ -1,7 +1,4 @@
-const {
-  createIndicator,
-  getWinningBidValue
-} = require('../util');
+const { createIndicator } = require('../util');
 const { hasAward } = require('../preconditions');
 
 const requiredFields = [
@@ -15,15 +12,29 @@ const requiredFields = [
 const preconditions = [ hasAward ];
 
 const testFunction = (release, options) => {
-  const { tender } = release;
+
+  let flagged = false;
+
+  const { awards, tender } = release;
   const { threshold } = options;
-  const winningBid = getWinningBidValue(release);
   const { value: estimatedPrice } = tender;
-  if (estimatedPrice.currency !== winningBid.currency) {
-    throw new Error('i171 - trying to compare estimated price and winning bid w/ different currencies');
-  }
-  const percentDiff = Math.abs((estimatedPrice.amount - winningBid.amount) / estimatedPrice.amount);
-  return percentDiff <= threshold;
+
+  const activeAwards = awards
+    .filter(a => a.status === 'active')
+    .map(a => a.value);
+
+  activeAwards.forEach(award => {
+    if (estimatedPrice.currency !== award.currency) {
+      throw new Error('Trying to compare estimated price and winning bid w/ different currencies');
+    }
+    const percentDiff = Math.abs((estimatedPrice.amount - award.amount) / estimatedPrice.amount);
+    if (percentDiff <= threshold) {
+      flagged = true;
+    }
+  });
+
+  return flagged;
+
 };
 
 const indicatorFunction = createIndicator('i171', testFunction, { requiredFields, preconditions });
