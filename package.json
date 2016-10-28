@@ -6,7 +6,7 @@
     "eslint": "eslint '**/*.js'",
     "tape": "tape",
     "tap-spec": "tap-spec",
-    "test": "tape '**/test/test-*.js' | tap-spec"
+    "test": "NODE_ENV=testing tape '**/test/test-*.js' | tap-spec"
   },
   "devDependencies": {
     "eslint": "3.8.1",
@@ -16,6 +16,7 @@
     "node": ">=6.8.0"
   },
   "dependencies": {
+    "immutable": "^3.8.1",
     "moment": "^2.15.2",
     "mongodb": "^2.2.11"
   }

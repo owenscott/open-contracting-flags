@@ -1,4 +1,7 @@
-const { getWinningBidValue } = require('./util.js');
+const {
+  createIndicator,
+  getWinningBidValue
+} = require('../util');
 
 const haveExactDiff = (winningPrice, comparisonPrice) => {
   const prices = [winningPrice, comparisonPrice].sort();
@@ -6,16 +9,7 @@ const haveExactDiff = (winningPrice, comparisonPrice) => {
   return (percentDiff * 100) % 1 === 0;
 };
 
-/**
- * Indicator 085: Bids are an exact percentage apart
- *
- * Calculation Method: Compare the winning bid against all other bids. If any of
- * the bids are an exact percentage apart, return `true`, otherwise return `false`.
- * Always compare bids by using the formula: (largest - smallest) / smallest.
- *
- * @param {object} release - An OCDS release object
- */
-function calculateI085(release) {
+const testFunction = release => {
   let flagResult = false;
   const winningValue = getWinningBidValue(release);
   if (winningValue === null) {
@@ -32,6 +26,21 @@ function calculateI085(release) {
     }
   });
   return flagResult;
+};
+
+const indicatorFunction = createIndicator('i085', testFunction);
+
+/**
+ * Indicator 085: Bids are an exact percentage apart
+ *
+ * Calculation Method: Compare the winning bid against all other bids. If any of
+ * the bids are an exact percentage apart, return `true`, otherwise return `false`.
+ * Always compare bids by using the formula: (largest - smallest) / smallest.
+ *
+ * @param {object} release - An OCDS release object
+ */
+function i085(release) {
+  return indicatorFunction(release);
 }
 
-module.exports = calculateI085;
+module.exports = i085;
