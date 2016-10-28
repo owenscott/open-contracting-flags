@@ -3,12 +3,12 @@
 const test = require('tape');
 const i003 = require('../i003.js');
 
-test('i003 should return false if there are no winners', assert => {
+test('i003 should return null if there are no winners', assert => {
   assert.plan(1);
   const release = {
     awards: []
   };
-  assert.strictEqual(i003(release), false);
+  assert.strictEqual(i003(release), null);
 });
 
 test('i003 should return false if there are multiple eligible bidders', assert => {
@@ -30,7 +30,7 @@ test('i003 should return false if there is no winning bidder', assert => {
       { id: 2, status: 'unsuccessful', ineligibleYN: 'Y' }
     ]
   };
-  assert.strictEqual(i003(release), false);
+  assert.strictEqual(i003(release), null);
 });
 
 test('i003 should return true if there is only one bidder', assert => {

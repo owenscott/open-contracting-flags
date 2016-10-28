@@ -1,12 +1,12 @@
 const test = require('tape');
 const i007 = require('../i007.js');
 
-test('i007 should return false when there are no suppliers', assert => {
+test('i007 should return null when there are no suppliers', assert => {
   assert.plan(1);
   const release = {
     awards: []
   };
-  assert.strictEqual(i007(release), false);
+  assert.strictEqual(i007(release), null);
 });
 
 test('i007 should return false when there are multiple suppliers', assert => {

@@ -1,8 +1,11 @@
 const { createIndicator } = require('../util');
+const { hasAward } = require('../preconditions');
 
 const requiredFields = [
   'awards.suppliers.id'
 ];
+
+const preconditions = [ hasAward ];
 
 const testFunction = release => {
   const { awards } = release;
@@ -12,7 +15,7 @@ const testFunction = release => {
   return uniqueSuppliers.length === 1;
 };
 
-const indicatorFunction = createIndicator('i007', testFunction, { requiredFields });
+const indicatorFunction = createIndicator('i007', testFunction, { requiredFields, preconditions });
 
 /**
  * Indicator 007: This tender featured a single bidder only
