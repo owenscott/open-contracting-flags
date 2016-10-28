@@ -19,9 +19,14 @@ const cleanup = (dbConnection, writeStream) =>
 
 let i = 0;
 
+const INDICATOR_OPTIONS = {
+  i038: { threshold: 7 },
+  i171: { threshold: 0.01 }
+};
+
 const evaluateRelease = (release, writeStream) => {
   const results = indicators.map(i => {
-    const result = flags[i](release);
+    const result = flags[i](release, INDICATOR_OPTIONS[i] || {});
     return result === null ? 'null' : result;
   });
   if (++i % 100 === 0) {

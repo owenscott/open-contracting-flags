@@ -8,7 +8,7 @@ test('i171 returns null if there is no estimated price', assert => {
   const release = {
     tender: {}
   };
-  assert.strictEqual(i171(release, 0.1), null);
+  assert.strictEqual(i171(release, { threshold: 0.1 }), null);
 });
 
 test('i171 returns null if there is no winning bid', assert => {
@@ -17,7 +17,7 @@ test('i171 returns null if there is no winning bid', assert => {
     tender: { value: { amount: 1000, currency: 'USD' } },
     awards: []
   };
-  assert.strictEqual(i171(release, 0.1), null);
+  assert.strictEqual(i171(release, { threshold: 0.1 }), null);
 });
 
 test('i171 returns false if the winning bid is outside of the threshold', assert => {
@@ -28,7 +28,7 @@ test('i171 returns false if the winning bid is outside of the threshold', assert
       { status: 'active', value: { amount: 1500, currency: 'USD' } }
     ]
   };
-  assert.strictEqual(i171(release, 0.1), false);
+  assert.strictEqual(i171(release, { threshold: 0.1 }), false);
 });
 
 test('i171 returns true if the winning bid is within the threshold', assert => {
@@ -39,7 +39,7 @@ test('i171 returns true if the winning bid is within the threshold', assert => {
       { status: 'active', value: { amount: 1010, currency: 'USD' } }
     ]
   };
-  assert.strictEqual(i171(release, 0.1), true);
+  assert.strictEqual(i171(release, { threshold: 0.1 }), true);
 });
 
 test('i171 returns true if the winning bid is exactly at the threshold', assert => {
@@ -50,7 +50,7 @@ test('i171 returns true if the winning bid is exactly at the threshold', assert 
       { status: 'active', value: { amount: 1100, currency: 'USD' } }
     ]
   };
-  assert.strictEqual(i171(release, 0.1), true);
+  assert.strictEqual(i171(release, { threshold: 0.1 }), true);
 });
 
 test('i171 returns true if the winning bid is the same as the expected value', assert => {
@@ -61,7 +61,7 @@ test('i171 returns true if the winning bid is the same as the expected value', a
       { status: 'active', value: { amount: 1000, currency: 'USD' } }
     ]
   };
-  assert.strictEqual(i171(release, 0.1), true);
+  assert.strictEqual(i171(release, { threshold: 0.1 }), true);
 });
 
 test('i171 thros if teh winning bid and the estimated value are in different currencies', assert => {
@@ -73,6 +73,6 @@ test('i171 thros if teh winning bid and the estimated value are in different cur
     ]
   };
   assert.throws(() => {
-    i171(release);
+    i171(release, { threshold: 0.1 });
   });
 });

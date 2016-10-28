@@ -3,6 +3,12 @@
 const { getReleaseErrors } = require('../schema');
 const checkRequiredFields = require('./check-required-fields.js');
 
+const DEFAULT_OPTIONS = {
+  preconditions: [],
+  requiredOCDSFields: [],
+  requiredCustomFields: []
+};
+
 const verifyRelease = (release, indicatorId) => {
   const errors = getReleaseErrors(release);
   if (errors !== null) {
@@ -16,40 +22,54 @@ const verifyResult = (result, indicatorId) => {
   }
 };
 
-const createIndicator = (indicatorId, testFunction, options = {}) => (release, testFunctionOptions) => {
+const createIndicator = (indicatorId, testFunction, options = {}) => {
 
-  const defaultOptions = { preconditions: [], requiredFields: [] };
-  const { preconditions, requiredFields } = Object.assign({}, defaultOptions, options);
+  const { preconditions, requiredOCDSFields, requiredCustomFields } = Object.assign({}, DEFAULT_OPTIONS, options);
 
-  if (process.env.NODE_ENV === 'testing' || process.env.NODE_ENV === 'development') {
-    verifyRelease(release, indicatorId);
-  }
+  const indicatorFunction = (release, testFunctionOptions) => {
 
-  const requiredFieldErrors = checkRequiredFields(release, requiredFields);
+    const requiredFields = requiredOCDSFields.concat(requiredCustomFields);
 
-  // if there are any missing fields we return null (e.g. not applicable)
-  if (requiredFieldErrors !== null) {
     if (process.env.NODE_ENV === 'testing' || process.env.NODE_ENV === 'development') {
-      console.warn(requiredFieldErrors);
+      verifyRelease(release, indicatorId);
     }
-    return null;
-  }
 
-  for (let i = 0; i < preconditions.length; i++) {
-    // if a precondition isn't met return null (e.g. not applicable)
-    if (!preconditions[i](release)) {
+    const requiredFieldErrors = checkRequiredFields(release, requiredFields);
+
+    // if there are any missing fields we return null (e.g. not applicable)
+    if (requiredFieldErrors !== null) {
       if (process.env.NODE_ENV === 'testing' || process.env.NODE_ENV === 'development') {
-        console.warn(`${indicatorId} failed precondition ${preconditions[i].name}`);
+        console.warn(requiredFieldErrors);
       }
       return null;
     }
-  }
 
-  const result = testFunction(release, testFunctionOptions);
+    for (let i = 0; i < preconditions.length; i++) {
+      // if a precondition isn't met return null (e.g. not applicable)
+      if (!preconditions[i](release)) {
+        if (process.env.NODE_ENV === 'testing' || process.env.NODE_ENV === 'development') {
+          console.warn(`${indicatorId} failed precondition ${preconditions[i].name}`);
+        }
+        return null;
+      }
+    }
 
-  verifyResult(result, indicatorId);
+    const result = testFunction(release, testFunctionOptions);
 
-  return result;
+    verifyResult(result, indicatorId);
+
+    return result;
+
+  };
+
+  indicatorFunction.selfDocument = () => ({
+    id: indicatorId,
+    requiredOCDSFields,
+    requiredCustomFields,
+    preconditions: preconditions.map(p => p.selfDocument())
+  });
+
+  return indicatorFunction;
 
 };
 

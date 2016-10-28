@@ -12,7 +12,7 @@ test('i038 should return null if there is not date information', assert => {
   assert.strictEqual(i038(release), null);
 });
 
-test('i03 should return false if the date range is greater than the threshold', assert => {
+test('i038 should return false if the date range is greater than the threshold', assert => {
   assert.plan(1);
   const release = {
     tender: {
@@ -23,10 +23,10 @@ test('i03 should return false if the date range is greater than the threshold', 
     }
   };
   const threshold = 7;
-  assert.strictEqual(i038(release, threshold), false);
+  assert.strictEqual(i038(release, { threshold }), false);
 });
 
-test('i03 should return false if the date range is less than the threshold', assert => {
+test('i038 should return false if the date range is less than the threshold', assert => {
   assert.plan(1);
   const release = {
     tender: {
@@ -37,7 +37,7 @@ test('i03 should return false if the date range is less than the threshold', ass
     }
   };
   const threshold = 7;
-  assert.strictEqual(i038(release, threshold), true);
+  assert.strictEqual(i038(release, { threshold }), true);
 });
 
 test('i03 should return true if the date range is equal to the threshold', assert => {

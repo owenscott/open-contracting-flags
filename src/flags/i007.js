@@ -1,11 +1,7 @@
+// Indicator 007: This tender featured a single bidder only
+
 const { createIndicator } = require('../util');
 const { hasAward } = require('../preconditions');
-
-const requiredFields = [
-  'awards.suppliers.id'
-];
-
-const preconditions = [ hasAward ];
 
 const testFunction = release => {
   const { awards } = release;
@@ -15,19 +11,11 @@ const testFunction = release => {
   return uniqueSuppliers.length === 1;
 };
 
-const indicatorFunction = createIndicator('i007', testFunction, { requiredFields, preconditions });
-
-/**
- * Indicator 007: This tender featured a single bidder only
- *
- * Calculation Method: Check if the count of unique bidders for each project
- * is greater than 1
- *
- * @param {object} release - An OCDS release object
- */
-function i007(release) {
-  return indicatorFunction(release);
-}
+const i007 = createIndicator('i007', testFunction, {
+  preconditions: [ hasAward ],
+  requiredOCDSFields: [ 'awards.suppliers.id' ],
+  requiredCustomFields: []
+});
 
 module.exports = i007;
 
