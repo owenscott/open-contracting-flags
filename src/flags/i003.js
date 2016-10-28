@@ -1,5 +1,10 @@
 const { createIndicator } = require('../util');
 
+const requiredFields = [
+  'awards.status',
+  'awards.ineligibleYN' // non-OCDS
+];
+
 const testFunction = release => {
   const { awards } = release;
 
@@ -12,7 +17,7 @@ const testFunction = release => {
   return hasWinner && losersIneligible;
 };
 
-const indicatorFunction = createIndicator('i003', testFunction);
+const indicatorFunction = createIndicator('i003', testFunction, { requiredFields });
 
 /**
  * Indicator 003: Only winning bidder was eligible

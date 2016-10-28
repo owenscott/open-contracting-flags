@@ -1,15 +1,19 @@
 const { createIndicator } = require('../util');
 
+const requiredFields = [
+  'tender.tenderPeriod.startDate',
+  'tender.tenderPeriod.endDate'
+];
+
 const testFunction = (release, options) => {
   const { tender } = release;
   const { threshold } = options;
-  if (!tender || !tender.tenderPeriod) return null;
   const { tenderPeriod: { startDate, endDate } } = tender;
   const daysBetween = (endDate.getTime() - startDate.getTime()) / (24 * 3600 * 1000);
   return daysBetween < threshold;
 };
 
-const indicatorFunction = createIndicator('i038', testFunction);
+const indicatorFunction = createIndicator('i038', testFunction, { requiredFields });
 
 /**
  * Indicator 038: Allowing an unreasonable short time to respond to requests

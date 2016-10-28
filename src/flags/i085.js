@@ -2,6 +2,7 @@ const {
   createIndicator,
   getWinningBidValue
 } = require('../util');
+const { hasAward } = require('../preconditions');
 
 const haveExactDiff = (winningPrice, comparisonPrice) => {
   const prices = [winningPrice, comparisonPrice].sort();
@@ -9,12 +10,17 @@ const haveExactDiff = (winningPrice, comparisonPrice) => {
   return (percentDiff * 100) % 1 === 0;
 };
 
+const requiredFields = [
+  'awards.status',
+  'awards.value.amount',
+  'awards.value.currency'
+];
+
+const preconditions = [ hasAward ];
+
 const testFunction = release => {
   let flagResult = false;
   const winningValue = getWinningBidValue(release);
-  if (winningValue === null) {
-    return null;
-  }
   const otherBids = release.awards
     .filter(a => a.status !== 'active');
   otherBids.forEach(bid => {
@@ -28,7 +34,7 @@ const testFunction = release => {
   return flagResult;
 };
 
-const indicatorFunction = createIndicator('i085', testFunction);
+const indicatorFunction = createIndicator('i085', testFunction, { requiredFields, preconditions });
 
 /**
  * Indicator 085: Bids are an exact percentage apart

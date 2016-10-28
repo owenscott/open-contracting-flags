@@ -2,17 +2,22 @@ const {
   createIndicator,
   getWinningBidValue
 } = require('../util');
+const { hasAward } = require('../preconditions');
+
+const requiredFields = [
+  'awards.status',
+  'awards.value.amount',
+  'awards.value.currency',
+  'tender.value.amount',
+  'tender.value.currency'
+];
+
+const preconditions = [ hasAward ];
 
 const testFunction = (release, options) => {
   const { tender } = release;
   const { threshold } = options;
-  if (!tender || !tender.value) {
-    return null;
-  }
   const winningBid = getWinningBidValue(release);
-  if (winningBid === null) {
-    return null;
-  }
   const { value: estimatedPrice } = tender;
   if (estimatedPrice.currency !== winningBid.currency) {
     throw new Error('i171 - trying to compare estimated price and winning bid w/ different currencies');
@@ -21,7 +26,7 @@ const testFunction = (release, options) => {
   return percentDiff <= threshold;
 };
 
-const indicatorFunction = createIndicator('i171', testFunction);
+const indicatorFunction = createIndicator('i171', testFunction, { requiredFields, preconditions });
 
 /**
  * Indicator 171: Bid is too close to budget, estimate or preferred solution
