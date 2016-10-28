@@ -15,8 +15,8 @@ test('i003 should return false if there are multiple eligible bidders', assert =
   assert.plan(1);
   const release = {
     awards: [
-      { status: 'active', ineligibleYN: 'N' },
-      { status: 'unsuccessful', ineligibleYN: 'N' }
+      { id: 1, status: 'active', ineligibleYN: 'N' },
+      { id: 2, status: 'unsuccessful', ineligibleYN: 'N' }
     ]
   };
   assert.strictEqual(i003(release), false);
@@ -26,8 +26,8 @@ test('i003 should return false if there is no winning bidder', assert => {
   assert.plan(1);
   const release = {
     awards: [
-      { status: 'unsuccessful', ineligibleYN: 'Y' },
-      { status: 'unsuccessful', ineligibleYN: 'Y' }
+      { id: 1, status: 'unsuccessful', ineligibleYN: 'Y' },
+      { id: 2, status: 'unsuccessful', ineligibleYN: 'Y' }
     ]
   };
   assert.strictEqual(i003(release), false);
@@ -47,9 +47,9 @@ test('i003 should return true if there are multiple bidders but only winner is e
   assert.plan(1);
   const release = {
     awards: [
-      { status: 'active', ineligibleYN: 'N' },
-      { status: 'unsuccessful', ineligibleYN: 'Y' },
-      { status: 'unsuccessful', ineligibleYN: 'Y' }
+      { id: 1, status: 'active', ineligibleYN: 'N' },
+      { id: 2, status: 'unsuccessful', ineligibleYN: 'Y' },
+      { id: 3, status: 'unsuccessful', ineligibleYN: 'Y' }
     ]
   };
   assert.strictEqual(i003(release), true);

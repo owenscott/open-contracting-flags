@@ -1,9 +1,10 @@
+/* eslint-disable no-console */
 
 const fs = require('fs');
 const path = require('path');
 const mongodb = require('mongodb');
 const { mongoUri } = require('../config.js');
-const flags = require('../flags');
+const flags = require('../src/flags');
 
 const outFile = `release-${new Date().getTime()}.csv`;
 const outPath = path.join(__dirname, '..', 'output', outFile);

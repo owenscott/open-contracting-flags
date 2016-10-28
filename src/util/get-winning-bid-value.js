@@ -1,4 +1,3 @@
-
 const assert = require('assert');
 
 const getWinningBidValue = release => {
@@ -14,6 +13,4 @@ const getWinningBidValue = release => {
   }
 };
 
-module.exports = {
-  getWinningBidValue
-};
+module.exports = getWinningBidValue;
