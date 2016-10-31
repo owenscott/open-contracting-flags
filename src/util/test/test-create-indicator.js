@@ -33,6 +33,7 @@ test('the function returned by createIndicator should be able to self-document',
   const result = indicator.selfDocument();
   const expectedResult = {
     id: 'myIndicator',
+    type: 'release',
     preconditions: [],
     requiredOCDSFields: [],
     requiredCustomFields: []
@@ -53,6 +54,7 @@ test('indicator self-documenting should work with preconditions which also self 
   const result = indicator.selfDocument();
   const expectedResult = {
     id: 'myIndicator',
+    type: 'release',
     preconditions: [
       { name: 'myFirstPrecondition', description: 'foo' },
       { name: 'mySecondPrecondition', description: 'bar' }

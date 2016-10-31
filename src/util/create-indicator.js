@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-const { getReleaseErrors } = require('../schema');
+const typecheckRelease = require('./typecheck-release.js');
 const checkRequiredFields = require('./check-required-fields.js');
 
 const DEFAULT_OPTIONS = {
@@ -9,17 +9,11 @@ const DEFAULT_OPTIONS = {
   requiredCustomFields: []
 };
 
-const verifyRelease = (release, indicatorId) => {
-  const errors = getReleaseErrors(release);
-  if (errors !== null) {
-    throw new Error(`Invalid release object passed to indicator ${indicatorId} - ${JSON.stringify(errors)}`);
-  }
-};
-
-const verifyResult = (result, indicatorId) => {
+const typecheckResult = (result, indicatorId) => {
   if (typeof result !== 'boolean') {
     throw new Error(`Indicator ${indicatorId}'s test function returned type ${typeof result}. Non-boolean results should be handled by preconditions`);
   }
+  return result;
 };
 
 const createIndicator = (indicatorId, testFunction, options = {}) => {
@@ -28,12 +22,9 @@ const createIndicator = (indicatorId, testFunction, options = {}) => {
 
   const indicatorFunction = (release, testFunctionOptions) => {
 
+    typecheckRelease(release, indicatorId);
+
     const requiredFields = requiredOCDSFields.concat(requiredCustomFields);
-
-    if (process.env.NODE_ENV === 'testing' || process.env.NODE_ENV === 'development') {
-      verifyRelease(release, indicatorId);
-    }
-
     const requiredFieldErrors = checkRequiredFields(release, requiredFields);
 
     // if there are any missing fields we return null (e.g. not applicable)
@@ -56,14 +47,13 @@ const createIndicator = (indicatorId, testFunction, options = {}) => {
 
     const result = testFunction(release, testFunctionOptions);
 
-    verifyResult(result, indicatorId);
-
-    return result;
+    return typecheckResult(result, indicatorId);
 
   };
 
   indicatorFunction.selfDocument = () => ({
     id: indicatorId,
+    type: 'release',
     requiredOCDSFields,
     requiredCustomFields,
     preconditions: preconditions.map(p => p.selfDocument())
