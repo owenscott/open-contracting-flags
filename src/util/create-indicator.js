@@ -51,9 +51,11 @@ const createIndicator = (indicatorId, testFunction, options = {}) => {
 
   };
 
+  indicatorFunction.type = 'release';
+
   indicatorFunction.selfDocument = () => ({
     id: indicatorId,
-    type: 'release',
+    type: indicatorFunction.type,
     requiredOCDSFields,
     requiredCustomFields,
     preconditions: preconditions.map(p => p.selfDocument())

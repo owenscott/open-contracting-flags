@@ -67,9 +67,11 @@ const createCollectionIndicator = (indicatorId, testFunction, options = {}) => {
 
   };
 
+  indicatorFunction.type = 'collection';
+
   indicatorFunction.selfDocument = () => ({
     id: indicatorId,
-    type: 'collection',
+    type: indicatorFunction.type,
     requiredOCDSFields,
     requiredCustomFields,
     filters: filters.map(f => f.selfDocument())

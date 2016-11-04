@@ -9,7 +9,7 @@ const testFunction = release => {
 
   const losersIneligible = awards
     .filter(a => a.status !== 'active')
-    .reduce((ineligible, a) => a.ineligibleYN === 'N' ? false : ineligible, true);
+    .reduce((ineligible, a) => a.inelibigleYN === 'N' ? false : ineligible, true);
 
   return losersIneligible;
 
@@ -18,7 +18,7 @@ const testFunction = release => {
 const i003 = createIndicator('i003', testFunction, {
   preconditions: [ hasAward ],
   requiredOCDSFields: [ 'awards.status' ],
-  requiredCustomFields: [ 'awards.ineligibleYN' ]
+  requiredCustomFields: [ 'awards.inelibigleYN' ]
 });
 
 module.exports = i003;

@@ -5,15 +5,17 @@ const moment = require('moment');
 const i038 = require('../i038.js');
 
 test('i038 should return null if there is not date information', assert => {
-  assert.plan(1);
+  assert.plan(2);
   const release = {
     tender: {}
   };
+  const releaseString = JSON.stringify(release);
   assert.strictEqual(i038(release), null);
+  assert.strictEqual(JSON.stringify(release), releaseString, 'not mutated');
 });
 
 test('i038 should return false if the date range is greater than the threshold', assert => {
-  assert.plan(1);
+  assert.plan(2);
   const release = {
     tender: {
       tenderPeriod: {
@@ -22,12 +24,14 @@ test('i038 should return false if the date range is greater than the threshold',
       }
     }
   };
+  const releaseString = JSON.stringify(release);
   const threshold = 7;
   assert.strictEqual(i038(release, { threshold }), false);
+  assert.strictEqual(JSON.stringify(release), releaseString, 'not mutated');
 });
 
 test('i038 should return false if the date range is less than the threshold', assert => {
-  assert.plan(1);
+  assert.plan(2);
   const release = {
     tender: {
       tenderPeriod: {
@@ -36,12 +40,14 @@ test('i038 should return false if the date range is less than the threshold', as
       }
     }
   };
+  const releaseString = JSON.stringify(release);
   const threshold = 7;
   assert.strictEqual(i038(release, { threshold }), true);
+  assert.strictEqual(JSON.stringify(release), releaseString, 'not mutated');
 });
 
 test('i03 should return true if the date range is equal to the threshold', assert => {
-  assert.plan(1);
+  assert.plan(2);
   const threshold = 7;
   const startDate = new Date('2016-01-01');
   const release = {
@@ -52,5 +58,7 @@ test('i03 should return true if the date range is equal to the threshold', asser
       }
     }
   };
+  const releaseString = JSON.stringify(release);
   assert.strictEqual(i038(release, threshold), false);
+  assert.strictEqual(JSON.stringify(release), releaseString, 'not mutated');
 });

@@ -14,7 +14,8 @@ const testFunction = (collection, options) => {
     release.awards
       .filter(award => award.status === 'active')
       .forEach(award => {
-        if (Math.abs((award.value.amount - soleSourceLimit) / soleSourceLimit) <= threshold) {
+        if (Math.abs((award.value.amount - soleSourceLimit) / soleSourceLimit) <= threshold ||
+          award.value.amount > soleSourceLimit) {
           award.suppliers.forEach(supplier => {
             flaggedBySupplier[supplier._id] = flaggedBySupplier[supplier._id] || 0;
             flaggedBySupplier[supplier._id]++;

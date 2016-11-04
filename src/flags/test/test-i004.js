@@ -4,14 +4,16 @@ const test = require('tape');
 const i004 = require('../i004.js');
 
 test('i004 should return null for an empty collection', assert => {
-  assert.plan(1);
+  assert.plan(2);
   const collection = [];
+  const collectionString = JSON.stringify(collection);
   const result = i004(collection, { threshold: 0.05, soleSourceLimit: 1000 });
   assert.strictEqual(result, null);
+  assert.strictEqual(JSON.stringify(collection), collectionString, 'not mutated');
 });
 
 test('i004 should return an empty object for a collection with no sole source awards', assert => {
-  assert.plan(1);
+  assert.plan(2);
   const collection = [
     {
       ocid: 'recordOne',
@@ -25,12 +27,14 @@ test('i004 should return an empty object for a collection with no sole source aw
       ]
     }
   ];
+  const collectionString = JSON.stringify(collection);
   const result = i004(collection, { threshold: 0.05, soleSourceLimit: 1000 });
   assert.strictEqual(result, null);
+  assert.strictEqual(JSON.stringify(collection), collectionString, 'not mutated');
 });
 
 test('i004 should with the correct object for a collection with one sole source awards', assert => {
-  assert.plan(1);
+  assert.plan(2);
   const collection = [
     {
       ocid: 'recordOne',
@@ -44,12 +48,14 @@ test('i004 should with the correct object for a collection with one sole source 
       ]
     }
   ];
+  const collectionString = JSON.stringify(collection);
   const result = i004(collection, { threshold: 0.05, soleSourceLimit: 1000 });
   assert.deepEqual(result, { recordOne: false });
+  assert.strictEqual(JSON.stringify(collection), collectionString, 'not mutated');
 });
 
 test('i004 should with the correct object for a collection with a supplier with multiple sole-source awards below the threshold', assert => {
-  assert.plan(1);
+  assert.plan(2);
   const collection = [
     {
       ocid: 'recordOne',
@@ -74,12 +80,14 @@ test('i004 should with the correct object for a collection with a supplier with 
       ]
     }
   ];
+  const collectionString = JSON.stringify(collection);
   const result = i004(collection, { threshold: 0.05, soleSourceLimit: 1000 });
   assert.deepEqual(result, { recordOne: false, recordTwo: false });
+  assert.strictEqual(JSON.stringify(collection), collectionString, 'not mutated');
 });
 
 test('i004 should with the correct object for a collection with a supplier with multiple sole-source awards at the threshold', assert => {
-  assert.plan(1);
+  assert.plan(2);
   const collection = [
     {
       ocid: 'recordOne',
@@ -115,6 +123,8 @@ test('i004 should with the correct object for a collection with a supplier with 
       ]
     }
   ];
+  const collectionString = JSON.stringify(collection);
   const result = i004(collection, { threshold: 0.05, soleSourceLimit: 1000 });
   assert.deepEqual(result, { recordOne: true, recordTwo: true, recordThree: false });
+  assert.strictEqual(JSON.stringify(collection), collectionString, 'not mutated');
 });
